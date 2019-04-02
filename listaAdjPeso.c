@@ -6,7 +6,7 @@
 //estrutura de no para vertices
 typedef struct vert
 {
-	int val;
+	int val,peso;
 	struct vertice *prox;
 }vertice;
 //estrutura do grafo com num de vertices e arestas e lista de adj
@@ -24,7 +24,7 @@ Grafo* criaGrafo(int v)
 	{
 		g->v  = v;
 		g->e = 0;
-		g->adj = (vertice*)malloc(v*sizeof(vertice));
+		g->adj = (vertice*)calloc(v,sizeof(vertice));
 		for (int i = 0; i <v; ++i)
 		{
 			g->adj[i].prox = NULL;
@@ -33,7 +33,7 @@ Grafo* criaGrafo(int v)
 	return g;
 }
 //função para criar vertice dado valor do vertice v
-vertice* novoVertice(int v)
+vertice* novoVertice(int v, int p)
 {
 	vertice *novo = (vertice*)malloc(sizeof(vertice));
 	if(novo == NULL)
@@ -42,12 +42,13 @@ vertice* novoVertice(int v)
 	}else
 	{
 		novo -> val = v;
+		novo -> peso = p;
 		novo -> prox = NULL;
 	}
 	return novo;
 }
 //função para criar aresta entre dois vertices distintos num grafo
-void insereAresta(Grafo *g, int v1, int v2)
+void insereAresta(Grafo *g, int v1, int v2,int peso)
 {
 	if(v1!=v2)//se nao for laco
 	{
@@ -64,12 +65,12 @@ void insereAresta(Grafo *g, int v1, int v2)
 		if(p==NULL)
 		{
 			//insere novo vertice na adj de v1
-			vertice *novo = novoVertice(v2);
+			vertice *novo = novoVertice(v2,peso);
 			novo->prox = g->adj[v1].prox;
 			g->adj[v1].prox = novo;
 			g->e++;
 			// repete o processo para v2
-			novo = novoVertice(v1);
+			novo = novoVertice(v1,peso);
 			novo->prox = g->adj[v2].prox;
 			g->adj[v2].prox = novo;
 		}
@@ -82,58 +83,20 @@ void imprimeGrafo(Grafo *g)
 	{
 		int i;
 		vertice *w;
-		printf("Grafo com %d vertices e %d arestas",g -> v, g -> e );
+		printf("\nGrafo com %d vertices e %d arestas",g -> v, g -> e );
 		for(i=0 ; i < g->v ; ++i)
 		{
 			printf("\nv%d ->",i);
 			w = g -> adj[i].prox;
 			while(w != NULL)
 			{
-				printf(" %d |",w -> val);
+				printf(" ( %d|%d )",w -> val,w->peso);
 				w = w -> prox;
 			}
 			printf("¬");
 		}
 	}
 }
-//função que calcula o grau de um vertice v num simples grafo g
-int calcularGrau(Grafo *g,int v)
-{
-	vertice *w =  g -> adj[v].prox;
-	int grau = 0;
-	while(w != NULL)
-	{
-		grau++;
-		w = w -> prox;
-	}	
-	return grau;
-}
-
-int sequenciaGrau(Grafo *g, Grafo *h)
-{
-	int grauG = 0, 
-		grauH = 0,
-		v = g -> v,
-		w = g -> v,
-		i = 0,
-		resp = 0;
-	while(grauG == grauH)
-	{
-		if(i < v && i < w)
-		{
-			grauG = calcularGrau(g, g -> adj[i].val);
-			grauH = calcularGrau(h, h -> adj[i].val);
-		}else break;
-	}
-	if(grauG == grauH)
-	{
-		printf("Sequencia de grau dos vertices entre os grafos sao iguais\n");
-		resp = 1 ;
-	}else printf("Sequencia de grau dos vertices entre os grafos sao diferentes\n");
-	return resp;
-
-}
-
 //funcao que remove arestas de um grafo simples valorado entre dois vertices e retorna o grafo
 Grafo *removerAresta(Grafo *g, int v, int w)
 {
@@ -178,20 +141,20 @@ Grafo *removerAresta(Grafo *g, int v, int w)
 	return g;
 }
 
+
 void main()
 {
 	Grafo *g = criaGrafo(4);
 	Grafo *h = criaGrafo(4);
-	insereAresta(g,0,1);
-	insereAresta(g,0,2);
-	insereAresta(g,0,3);
-	insereAresta(g,3,2);
-	insereAresta(g,1,3);
-	insereAresta(g,0,1);
-	insereAresta(g,0,2);
-	insereAresta(g,0,3);
-	printf("%d\n",calcularGrau(g,0));
-	printf("%d\n",sequenciaGrau(g,h));
+	insereAresta(g,0,1,2);
+	insereAresta(g,0,2,1);
+	insereAresta(g,0,3,3);
+	insereAresta(g,3,2,10);
+	insereAresta(g,1,3,5);
+	imprimeGrafo(g);
+	g = removerAresta(g,0,3);
+	imprimeGrafo(g);
+	g = removerAresta(g,0,3);
 	imprimeGrafo(g);
 
 }
