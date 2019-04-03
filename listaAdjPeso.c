@@ -1,9 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
 /*
 	Autor: Hadamo Egito
 */
-//estrutura de no para vertices
+#include <stdio.h>
+#include <stdlib.h>
 typedef struct vert
 {
 	int val,peso;
@@ -15,7 +14,6 @@ typedef struct grafo
 	int v,e;
 	vertice *adj;
 }Grafo;
-
 //função para criar grafo, dado numero de vertices v
 Grafo* criaGrafo(int v)
 {
@@ -25,6 +23,7 @@ Grafo* criaGrafo(int v)
 		g->v  = v;
 		g->e = 0;
 		g->adj = (vertice*)calloc(v,sizeof(vertice));
+		//todas as adjacencias estarao vazias neste momento
 		for (int i = 0; i <v; ++i)
 		{
 			g->adj[i].prox = NULL;
@@ -33,7 +32,7 @@ Grafo* criaGrafo(int v)
 	return g;
 }
 //função para criar vertice dado valor do vertice v
-vertice* novoVertice(int v, int p)
+vertice* novoVertice(int v, int peso)
 {
 	vertice *novo = (vertice*)malloc(sizeof(vertice));
 	if(novo == NULL)
@@ -42,7 +41,7 @@ vertice* novoVertice(int v, int p)
 	}else
 	{
 		novo -> val = v;
-		novo -> peso = p;
+		novo -> peso = peso;
 		novo -> prox = NULL;
 	}
 	return novo;
@@ -56,7 +55,7 @@ void insereAresta(Grafo *g, int v1, int v2,int peso)
 		while(p!=NULL)
 		{
 			if(p->val == v2) break; //verifica se o vertice ja esta ligado
-			p = p->prox; // para laco quando chegar no ultimo
+			p = p->prox;
 		}
 		/*se terminou de percorrer lista e não achou ocorrencia
 		do novo vertice, insere o vertice na lista
@@ -66,8 +65,9 @@ void insereAresta(Grafo *g, int v1, int v2,int peso)
 		{
 			//insere novo vertice na adj de v1
 			vertice *novo = novoVertice(v2,peso);
-			novo->prox = g->adj[v1].prox;
+			novo->prox = g -> adj[v1].prox;
 			g->adj[v1].prox = novo;
+			//incrementa num de arestas do grafo
 			g->e++;
 			// repete o processo para v2
 			novo = novoVertice(v1,peso);
@@ -141,7 +141,7 @@ Grafo *removerAresta(Grafo *g, int v, int w)
 	return g;
 }
 
-
+/*
 void main()
 {
 	Grafo *g = criaGrafo(4);
@@ -158,7 +158,7 @@ void main()
 	imprimeGrafo(g);
 
 }
-/*
+
 calcular grau
 imprimir estrutura
 veirifcar se seq de grau dos vertices de dois grafos sao iguais
