@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int *conjDisjunto;
 
 int* criaConj(int n)
 {
@@ -17,7 +16,8 @@ int* criaConj(int n)
 o menor valor encontrado em set[x] informa o conjunto com maior altura
 o conjunto com menor altura deve ser colocado dentro do conjunto de maior altura
 lembrando que valores em set[i] e set [j] são negativos, pois uniao é apenas entre conjuntos
-*/void uniao(int *set,int i, int j)
+*/
+void uniao(int *set,int i, int j)
 {
 
 		if(set[i] <= set[j])
