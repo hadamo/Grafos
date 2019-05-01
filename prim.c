@@ -19,7 +19,7 @@ typedef struct grafo
 //heap de prioridade minima para vertices
 typedef struct heap
 {
-	//vetor de vertices, preciso pois cada vertice é um ponteiro do tipo Vertice
+	//vetor de ponteiro de vertices
 	Vertice **v;
 	int tamHeap;
 }Heap;
@@ -137,7 +137,8 @@ Heap* criaHeap(Grafo *g)
 }
 void sobeHeap(Heap *h, ArvoreGMin *arv, int pos)
 {
-
+	//quando subir ou descer no heap, tem que atualizar os predecessores
+	
 }
 void desceHeap(Heap *h, ArvoreGMin *arv, int pos)
 {
