@@ -1,5 +1,6 @@
 # Grafos
 Repositório para atividades práticas da disciplina  DCE11721 - Teoria dos Grafos
+O repositório é livre para inserção de algoritmos por terceiros, basta fazer um pull request
 Licença wtfpl
 
 Conteúdo Programático:
